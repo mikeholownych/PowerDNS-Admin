@@ -4,7 +4,7 @@ import datetime
 import traceback
 import dns.name
 import dns.reversename
-from distutils.version import StrictVersion
+from ..lib.compat import StrictVersion
 from flask import Blueprint, render_template, make_response, url_for, current_app, request, redirect, abort, jsonify, g, session
 from flask_login import login_required, current_user, login_manager
 
