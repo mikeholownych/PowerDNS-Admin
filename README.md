@@ -38,6 +38,12 @@ Here are two options to run PowerDNS-Admin using Docker.
 To get started as quickly as possible, try option 1. If you want to make modifications to the configuration option 2 may
 be cleaner.
 
+### Supported Python versions
+
+PowerDNS-Admin is tested on Python 3.6 through 3.12.  The application includes
+compatibility shims so it can run under newer Python versions where the
+``distutils`` module has been removed.
+
 #### Option 1: From Docker Hub
 
 To run the application using the latest stable release on Docker Hub, run the following command:
