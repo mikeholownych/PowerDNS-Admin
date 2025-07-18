@@ -25,6 +25,7 @@ All 3 components can be installed on one server or if your installation is large
     - 3.9
     - 3.10
     - 3.11 - Failing due to issue with python3-saml later than 1.12.0
+    - 3.12
 - A database for PowerDNS-Admin, if you are using a database for PowerDNS itself this must be separate to that database. The currently supported databases are:
   - MySQL
   - PostgreSQL
