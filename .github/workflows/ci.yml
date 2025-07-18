@@ -1,0 +1,72 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: ["dev", "main", "master", "feature/**", "issue/**"]
+  pull_request:
+    branches: ["dev", "main", "master"]
+  schedule:
+    - cron: '0 1 * * *'
+
+jobs:
+  test:
+    name: Test Matrix
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+        os: [ubuntu-latest, windows-latest]
+        database: [mysql-8, postgres-15, sqlite]
+        arch: [amd64, arm64]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup QEMU
+        if: matrix.arch == 'arm64'
+        uses: docker/setup-qemu-action@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Configure database
+        run: |
+          echo "Setting up ${{ matrix.database }}"
+        shell: bash
+
+      - name: Run unit tests
+        run: |
+          pytest -m "unit" --cov=powerdnsadmin --cov-report=xml
+
+      - name: Run integration tests
+        run: |
+          pytest -m "integration" --cov=powerdnsadmin --cov-append
+
+      - name: API contract tests
+        run: |
+          pytest -m "api" --cov-append
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-xml-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.database }}-${{ matrix.arch }}
+          path: coverage.xml
+
+      - name: OWASP ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.10.0
+        with:
+          target: 'http://localhost:9191'
+          fail_action: true
+
+      - name: Run benchmarks
+        run: |
+          pytest tests/performance --benchmark-only
