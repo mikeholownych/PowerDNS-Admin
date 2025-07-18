@@ -200,6 +200,7 @@ class AppSettings(object):
         'saml_assertion_encrypted': True,
         'saml_cert': None,
         'saml_key': None,
+        'saml_implementation': 'legacy',
 
         # Zone Record Settings
         'forward_records_allow_edit': {
@@ -476,6 +477,7 @@ class AppSettings(object):
         'saml_assertion_encrypted': bool,
         'saml_cert': str,
         'saml_key': str,
+        'saml_implementation': str,
     }
 
     groups = {
