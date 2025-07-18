@@ -1,0 +1,64 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches: ["staging"]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./
+          file: docker/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_REGISTRY }}/powerdns-admin:${{ github.sha }}
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=registry,ref=${{ secrets.DOCKER_REGISTRY }}/powerdns-admin:cache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_REGISTRY }}/powerdns-admin:cache,mode=max
+
+      - name: Deploy to Kubernetes
+        id: deploy
+        uses: azure/k8s-deploy@v4
+        with:
+          namespace: staging
+          manifests: deploy/k8s/
+          images: ${{ secrets.DOCKER_REGISTRY }}/powerdns-admin:${{ github.sha }}
+          strategy: blue-green
+          traffic-split-method: pod
+
+      - name: Run health checks
+        run: |
+          kubectl rollout status deployment/powerdns-admin -n staging --timeout=300s
+          kubectl get pods -n staging
+
+      - name: Verify API
+        run: |
+          curl -f ${{ steps.deploy.outputs.url }}/api/healthz
+
+      - name: Notify success
+        if: success()
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: '{"text":"Staging deployment succeeded."}'
+          channel-id: ${{ secrets.SLACK_CHANNEL }}
+          slack-message-url: ${{ secrets.SLACK_WEBHOOK }}
