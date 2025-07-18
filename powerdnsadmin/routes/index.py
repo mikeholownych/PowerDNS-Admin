@@ -7,7 +7,7 @@ import ipaddress
 import base64
 import string
 from zxcvbn import zxcvbn
-from distutils.util import strtobool
+from ..lib.compat import strtobool
 from yaml import Loader, load
 from flask import Blueprint, render_template, make_response, url_for, current_app, g, session, request, redirect, abort
 from flask_login import login_user, logout_user, login_required, current_user

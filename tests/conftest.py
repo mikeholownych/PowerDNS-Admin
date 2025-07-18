@@ -79,13 +79,13 @@ def basic_auth_user_headers(app):
 @pytest.fixture(scope="module")
 def initial_data(app):
 
-    pdns_proto = os.environ['PDNS_PROTO']
-    pdns_host = os.environ['PDNS_HOST']
-    pdns_port = os.environ['PDNS_PORT']
+    pdns_proto = os.environ.get('PDNS_PROTO', 'http')
+    pdns_host = os.environ.get('PDNS_HOST', 'localhost')
+    pdns_port = os.environ.get('PDNS_PORT', '8081')
     pdns_api_url = '{0}://{1}:{2}'.format(pdns_proto, pdns_host, pdns_port)
 
     api_url_setting = Setting('pdns_api_url', pdns_api_url)
-    api_key_setting = Setting('pdns_api_key', os.environ['PDNS_API_KEY'])
+    api_key_setting = Setting('pdns_api_key', os.environ.get('PDNS_API_KEY', 'changeme'))
     allow_create_domain_setting = Setting('allow_user_create_domain', True)
 
     with app.app_context():
@@ -126,13 +126,13 @@ def initial_data(app):
 
 @pytest.fixture(scope="module")
 def initial_apikey_data(app):
-    pdns_proto = os.environ['PDNS_PROTO']
-    pdns_host = os.environ['PDNS_HOST']
-    pdns_port = os.environ['PDNS_PORT']
+    pdns_proto = os.environ.get('PDNS_PROTO', 'http')
+    pdns_host = os.environ.get('PDNS_HOST', 'localhost')
+    pdns_port = os.environ.get('PDNS_PORT', '8081')
     pdns_api_url = '{0}://{1}:{2}'.format(pdns_proto, pdns_host, pdns_port)
 
     api_url_setting = Setting('pdns_api_url', pdns_api_url)
-    api_key_setting = Setting('pdns_api_key', os.environ['PDNS_API_KEY'])
+    api_key_setting = Setting('pdns_api_key', os.environ.get('PDNS_API_KEY', 'changeme'))
     allow_create_domain_setting = Setting('allow_user_create_domain', True)
     allow_remove_domain_setting = Setting('allow_user_remove_domain', True)
 
