@@ -14,7 +14,7 @@ A PowerDNS web interface with advanced features.
 - Provides activity logging
 - Authentication:
   - Local User Support
-  - SAML Support
+  - SAML Support (legacy and modern implementations)
   - LDAP Support: OpenLDAP / Active Directory
   - OAuth Support: Google / GitHub / Azure / OpenID
 - Two-factor authentication support (TOTP)

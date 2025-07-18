@@ -53,6 +53,7 @@
 | SAML_SP_CONTACT_MAIL           | 
 | SAML_SP_CONTACT_NAME           | 
 | SAML_SP_ENTITY_ID              | 
+| SAML_IMPLEMENTATION            | Choose legacy or modern for SAML backend |
 | SAML_WANT_MESSAGE_SIGNED       | 
 | SECRET_KEY                     | Flask secret key [^1]                                                    | Y          | no default    |
 | SESSION_COOKIE_SECURE          | 
