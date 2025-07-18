@@ -14,7 +14,7 @@ A PowerDNS web interface with advanced features.
 - Provides activity logging
 - Authentication:
   - Local User Support
-  - SAML Support
+  - SAML Support (legacy and modern implementations)
   - LDAP Support: OpenLDAP / Active Directory
   - OAuth Support: Google / GitHub / Azure / OpenID
 - Two-factor authentication support (TOTP)
@@ -37,6 +37,12 @@ the [wiki](https://github.com/PowerDNS-Admin/PowerDNS-Admin/blob/master/docs/wik
 Here are two options to run PowerDNS-Admin using Docker.
 To get started as quickly as possible, try option 1. If you want to make modifications to the configuration option 2 may
 be cleaner.
+
+### Supported Python versions
+
+PowerDNS-Admin is tested on Python 3.6 through 3.12.  The application includes
+compatibility shims so it can run under newer Python versions where the
+``distutils`` module has been removed.
 
 #### Option 1: From Docker Hub
 

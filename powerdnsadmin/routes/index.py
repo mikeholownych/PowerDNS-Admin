@@ -30,7 +30,9 @@ from ..services.google import google_oauth
 from ..services.github import github_oauth
 from ..services.azure import azure_oauth
 from ..services.oidc import oidc_oauth
-from ..services.saml import SAML
+from ..lib.auth.saml_legacy import SAML as SAML_Legacy
+from ..lib.auth.saml_modern import SAMLModern
+from ..lib.auth.saml_migration import migrate_config
 from ..services.token import confirm_token
 from ..services.email import send_account_verification
 
@@ -57,7 +59,12 @@ def register_modules():
     github = github_oauth()
     azure = azure_oauth()
     oidc = oidc_oauth()
-    saml = SAML()
+    saml_impl = current_app.config.get('SAML_IMPLEMENTATION', 'legacy')
+    if saml_impl == 'modern':
+        migrate_config(current_app.config)
+        saml = SAMLModern(current_app.config)
+    else:
+        saml = SAML_Legacy()
 
 
 @index_bp.before_request
