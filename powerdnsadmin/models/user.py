@@ -105,7 +105,9 @@ class User(db.Model):
             return plain_text_password
 
         pw = plain_text_password if plain_text_password else self.plain_text_password
-        return bcrypt.hashpw(pw.encode('utf-8'), bcrypt.gensalt())
+        # use explicit rounds to enforce strong hashing cost
+        hashed = bcrypt.hashpw(pw.encode('utf-8'), bcrypt.gensalt(rounds=12))
+        return hashed
 
     def check_password(self, hashed_password):
         # Check hashed password. Using bcrypt, the salt is saved into the hash itself
