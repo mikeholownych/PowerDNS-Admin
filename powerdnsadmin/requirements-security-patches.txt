@@ -1,0 +1,5 @@
+cryptography==42.0.5  # CVE fixes
+requests==2.32.3      # Security patches  
+certifi==2024.2.2     # Certificate updates
+Jinja2==3.1.4         # Template injection fixes
+werkzeug==2.3.8       # Maintain Flask 2.2.5 compat
