@@ -47,3 +47,5 @@ rcssmin==1.1.1
 zxcvbn==4.4.28
 psycopg2==2.9.5
 setuptools==80.9.0
+pycryptodome==3.20.0
+pip-audit==2.7.2
