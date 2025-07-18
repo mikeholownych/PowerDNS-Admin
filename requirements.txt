@@ -45,5 +45,4 @@ zipp==3.11.0
 rcssmin==1.1.1
 zxcvbn==4.4.28
 psycopg2==2.9.5
-packaging==25.0
 setuptools==80.9.0
