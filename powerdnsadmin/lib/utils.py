@@ -6,7 +6,7 @@ import ipaddress
 import idna
 
 from collections.abc import Iterable
-from distutils.version import StrictVersion
+from .compat import StrictVersion
 from urllib.parse import urlparse
 
 
