@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: production
+    environment:
+      - SQLALCHEMY_DATABASE_URI=sqlite:////data/pdns.db
+    volumes:
+      - prod-db:/data
+    ports:
+      - "9191:80"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+volumes:
+  prod-db:

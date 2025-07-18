@@ -4,8 +4,8 @@ from flask import current_app
 import json
 import os
 
-from ..lib.certutil import KEY_FILE, CERT_FILE, create_self_signed_cert
-from ..lib.utils import urlparse
+from ..certutil import KEY_FILE, CERT_FILE, create_self_signed_cert
+from ..utils import urlparse
 
 
 class SAML(object):

@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    environment:
+      - SQLALCHEMY_DATABASE_URI=sqlite:////data/pdns.db
+      - FLASK_ENV=development
+      - SAML_IMPLEMENTATION=modern
+    volumes:
+      - .:/app
+      - dev-db:/data
+    ports:
+      - "9191:80"
+    command: ["/usr/local/bin/gunicorn","-b","0.0.0.0:80","--reload","powerdnsadmin:create_app()"]
+volumes:
+  dev-db:

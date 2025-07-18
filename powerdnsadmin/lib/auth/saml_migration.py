@@ -1,17 +1,13 @@
-import logging
+"""Utility helpers for migrating legacy SAML settings."""
 
-logger = logging.getLogger("saml_migration")
+from flask import current_app
 
-LEGACY_PREFIX = "SAML_"
-MODERN_PREFIX = "SAML_"
+LEGACY_FLAG = 'legacy'
+MODERN_FLAG = 'modern'
 
 
-def migrate_config(app_config):
-    """Migrate legacy SAML configuration to modern format."""
-    migrated = {}
-    for key, value in app_config.items():
-        if key.startswith(LEGACY_PREFIX):
-            migrated[key] = value
-    logger.info("Migrated %d SAML settings", len(migrated))
-    return migrated
-
+def migrate_config(setting_model):
+    """Ensure new configuration keys exist."""
+    if setting_model.get('saml_enabled') and not setting_model.get('saml_implementation'):
+        setting_model.set('saml_implementation', LEGACY_FLAG)
+        current_app.logger.info('SAML migration: defaulting implementation to legacy')
